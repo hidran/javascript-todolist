@@ -1,0 +1,13 @@
+html{
+    margin:0;
+    padding: 0;
+    text-align: center;
+    font-size: 62.5%;
+    height: 100%;
+}
+body{
+    box-sizing: border-box;
+    font-family: "Segoe UI", Helvetica, sans;
+   background: linear-gradient(to bottom, deepskyblue, white);
+  
+}
