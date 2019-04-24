@@ -1,70 +1,100 @@
-function Todolist(){
-
-    const todos = [
-        {
+function Todolist() {
+    let ultodo, input;
+    const todos = [{
             id: 0,
-            text : 'Go shopping',
-            completed : false
+            text: 'Go shopping',
+            completed: false
         },
         {
-            id: 0,
-            text : 'Go to school',
-            completed : false
+            id: 1,
+            text: 'Go to school',
+            completed: false
         },
         {
-            id: 0,
-            text : 'do homework',
-            completed : true
+            id: 2,
+            text: 'do homework',
+            completed: true
         },
     ];
-   const createLi = (todoObj) => {
-       const li = document.createElement('li');
+    const createLi = ({ text, completed, id }) => {
 
-       const spancheck = document.createElement('span');
-       
-       spancheck.classList.add(todoObj.completed ? 'completed' : 'uncomplete');
+        const li = document.createElement('li');
+        li.id = id;
+        const spancheck = document.createElement('span');
 
-       const spancross = document.createElement('span');
-       spancross.classList.add('cross');
+        spancheck.classList.add(completed ? 'completed' : 'uncomplete');
 
-       const text = document.createTextNode(todoObj.text);
+        const spancross = document.createElement('span');
+        spancross.classList.add('cross');
 
-       li.appendChild(spancheck);
-       li.appendChild(text);
-       li.appendChild(spancross);
-       return li;
+        const textNode = document.createTextNode(text);
 
-    /*
-    <li class="completed">
-            <span class="completed"></span>
-            Todo1
-            <span class="cross"></span>
-        </li>
-     */
-   };
+        li.appendChild(spancheck);
+        li.appendChild(textNode);
+        li.appendChild(spancross);
+        return li;
 
+
+    };
+    const addNewTodo = (todo) => {
+        todos.push(todo);
+        const li = createLi(todo);
+        const firstLi = ultodo.firstChild;
+        if (!firstLi) {
+            ultodo.appendChild(li);
+        } else {
+            ultodo.insertBefore(li, firstLi);
+        }
+
+
+    }
+    const addTodo = (e) => {
+        const key = e.keyCode,
+            ele = e.target;
+        // 13 = ENTER KEY
+        if (key === 13 && ele.value.trim().length > 2) {
+            const todo = {
+                text: ele.value.trim(),
+                id: todos.length,
+                completed: false
+            };
+
+            addNewTodo(todo);
+            ele.value = '';
+        }
+    }
     const renderTodos = () => {
-      
-        let ultodo = document.querySelector('ul#todolist');
-        if(!ultodo){
+
+        ultodo = document.querySelector('ul#todolist');
+        if (!ultodo) {
             ultodo = document.createElement('ul');
             ultodo.id = 'todolist';
             document.body.appendChild(ultodo);
         }
         //const lis = todos.map( todo => createLi(todo));
-        todos.map( todo => createLi(todo))
-        .forEach( li => ultodo.appendChild(li));
-    };
-    
-  return {
-      getTodos : function(){
-          return todos;
-      },
-      init : function(){
-        renderTodos();
-      }
+        todos.map(todo => createLi(todo))
+            .forEach(li => ultodo.appendChild(li));
 
-  }
+        input = document.querySelector('#todo');
+        if (!input) {
+            input = document.createElement('input');
+            input.id = 'todo';
+            input.name = 'todo';
+            input.placeholder = ' Add new todo';
+            ultodo.parentNode.insertBefore(input, ultodo);
+        }
+        input.addEventListener('keyup', addTodo);
+    };
+
+    return {
+        getTodos: function() {
+            return todos;
+        },
+        init: function() {
+            renderTodos();
+        }
+
+    }
 }
 //renderTodos();
 const myTodo = Todolist();
