@@ -1,5 +1,5 @@
 function Todolist() {
-    let ultodo, input;
+    let ultodo, input, btnAll, btnTodo, btnCompleted;
 
     let todos = [{
             id: 0,
@@ -97,7 +97,60 @@ function Todolist() {
             ele.value = '';
         }
     }
-    const renderTodos = () => {
+    const renderTodos = (todoType) => {
+        const lis = ultodo.querySelectorAll('li');
+        if (lis) {
+            lis.forEach(li => ultodo.removeChild(li));
+        }
+        const currentTodos = todos.filter(todo => {
+
+            if (todoType === 'all') {
+                return todo;
+            }
+
+            return (todoType === 'completed') ? todo.completed : !todo.completed;
+
+        });
+
+        currentTodos.map(todo => createLi(todo))
+            .forEach(li => ultodo.appendChild(li));
+    }
+    const toggleBtnClasses = (target, btns = []) => {
+
+        target.classList.toggle('active');
+        target.setAttribute('disabled', true);
+
+        btns.forEach(btn => {
+            btn.removeAttribute('disabled');
+            btn.classList.remove('active');
+        });
+    }
+    const addListeners = () => {
+
+        btnAll = document.querySelector('#btnAll');
+        btnCompleted = document.querySelector('#btnCompleted');
+        btnTodo = document.querySelector('#btnTodo');
+
+        btnAll.addEventListener('click', e => {
+
+            toggleBtnClasses(e.target, [btnTodo, btnCompleted]);
+            renderTodos('all');
+        });
+
+        btnCompleted.addEventListener('click', e => {
+
+            toggleBtnClasses(e.target, [btnAll, btnTodo]);
+            renderTodos('completed');
+        });
+
+        btnTodo.addEventListener('click', e => {
+
+            toggleBtnClasses(e.target, [btnAll, btnCompleted]);
+            renderTodos('uncomplete');
+
+        });
+    };
+    const renderTodoList = () => {
 
         ultodo = document.querySelector('ul#todolist');
         if (!ultodo) {
@@ -106,8 +159,7 @@ function Todolist() {
             document.body.appendChild(ultodo);
         }
         //const lis = todos.map( todo => createLi(todo));
-        todos.map(todo => createLi(todo))
-            .forEach(li => ultodo.appendChild(li));
+        renderTodos('all');
 
         input = document.querySelector('#todo');
         if (!input) {
@@ -118,6 +170,10 @@ function Todolist() {
             ultodo.parentNode.insertBefore(input, ultodo);
         }
         input.addEventListener('keyup', addTodo);
+
+
+
+        addListeners();
     };
 
     return {
@@ -125,7 +181,7 @@ function Todolist() {
             return todos;
         },
         init: function() {
-            renderTodos();
+            renderTodoList();
         }
 
     }
@@ -133,5 +189,5 @@ function Todolist() {
 //renderTodos();
 const myTodo = Todolist();
 myTodo.init();
-console.log(myTodo.getTodos());
-console.log(myTodo);
+//console.log(myTodo.getTodos());
+//console.log(myTodo);
