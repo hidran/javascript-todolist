@@ -42,7 +42,8 @@ li.completed {
     text-decoration: line-through;
 }
 
-ul#todolist li span.completed:after {
+ul#todolist li span.completed:after,
+ul#todolist li span.uncomplete:after {
     content: '\1F5F9';
     color: green;
     font-size: 18px;
@@ -50,10 +51,7 @@ ul#todolist li span.completed:after {
 }
 
 ul#todolist li span.uncomplete:after {
-    content: '\025A1';
-    color: green;
-    font-size: 28px;
-    padding: 4px;
+    content: '\02610';
 }
 
 ul#todolist li:hover span.cross:after {

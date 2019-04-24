@@ -23,20 +23,44 @@ function Todolist() {
         ultodo.removeChild(ultodo.querySelector('#todo-' + id));
     };
 
+    const toggleTodo = (id, ele) => {
+
+        todos = todos.map(ele => {
+            if (ele.id === id) {
+                ele.completed = !ele.completed;
+            }
+            return ele;
+        });
+        console.log(todos);
+        const oldClass = ele.classList.contains('completed') ? 'completed' : 'uncomplete';
+        const newClass = oldClass === 'completed' ? 'uncomplete' : 'completed';
+
+        ele.classList.replace(oldClass, newClass);
+
+        ele.parentNode.classList.toggle('completed');
+
+    };
     const createLi = ({ text, completed, id }) => {
 
         const li = document.createElement('li');
         li.id = 'todo-' + id;
+        if (completed) {
+            li.classList.add('completed');
+        }
         const spancheck = document.createElement('span');
 
         spancheck.classList.add(completed ? 'completed' : 'uncomplete');
 
+        spancheck.addEventListener('click', (e) => {
+            toggleTodo(id, e.target);
+        });
         const spancross = document.createElement('span');
         spancross.classList.add('cross');
 
         spancross.addEventListener('click', (e) => {
             removeTodo(id);
         });
+
         const textNode = document.createTextNode(text);
 
         li.appendChild(spancheck);
