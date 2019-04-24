@@ -1,6 +1,7 @@
 function Todolist() {
     let ultodo, input;
-    const todos = [{
+
+    let todos = [{
             id: 0,
             text: 'Go shopping',
             completed: false
@@ -16,10 +17,16 @@ function Todolist() {
             completed: true
         },
     ];
+    const removeTodo = id => {
+        todos = todos.filter(todo => todo.id !== id);
+        console.log(todos);
+        ultodo.removeChild(ultodo.querySelector('#todo-' + id));
+    };
+
     const createLi = ({ text, completed, id }) => {
 
         const li = document.createElement('li');
-        li.id = id;
+        li.id = 'todo-' + id;
         const spancheck = document.createElement('span');
 
         spancheck.classList.add(completed ? 'completed' : 'uncomplete');
@@ -27,6 +34,9 @@ function Todolist() {
         const spancross = document.createElement('span');
         spancross.classList.add('cross');
 
+        spancross.addEventListener('click', (e) => {
+            removeTodo(id);
+        });
         const textNode = document.createTextNode(text);
 
         li.appendChild(spancheck);
