@@ -1,25 +1,25 @@
 function Todolist() {
     let ultodo, input, btnAll, btnTodo, btnCompleted;
 
-    let todos = [{
-            id: 0,
-            text: 'Go shopping',
-            completed: false
-        },
-        {
-            id: 1,
-            text: 'Go to school',
-            completed: false
-        },
-        {
-            id: 2,
-            text: 'do homework',
-            completed: true
-        },
-    ];
+    let todos = [];
+
+    const loadTodosFromLocalStorage = () => {
+        const localTodos = localStorage.getItem('todos');
+        if (localTodos) {
+            const todoArr = JSON.parse(localTodos);
+            if (todoArr) {
+                todos = todoArr;
+            }
+        }
+    };
+    const saveTodosToLocalStorage = () => {
+        localStorage.setItem('todos', JSON.stringify(todos));
+    };
+
     const removeTodo = id => {
         todos = todos.filter(todo => todo.id !== id);
         console.log(todos);
+        saveTodosToLocalStorage();
         ultodo.removeChild(ultodo.querySelector('#todo-' + id));
     };
 
@@ -31,6 +31,7 @@ function Todolist() {
             }
             return ele;
         });
+        saveTodosToLocalStorage();
         console.log(todos);
         const oldClass = ele.classList.contains('completed') ? 'completed' : 'uncomplete';
         const newClass = oldClass === 'completed' ? 'uncomplete' : 'completed';
@@ -71,7 +72,8 @@ function Todolist() {
 
     };
     const addNewTodo = (todo) => {
-        todos.push(todo);
+        todos.unshift(todo);
+        saveTodosToLocalStorage();
         const li = createLi(todo);
         const firstLi = ultodo.firstChild;
         if (!firstLi) {
@@ -151,7 +153,7 @@ function Todolist() {
         });
     };
     const renderTodoList = () => {
-
+        loadTodosFromLocalStorage();
         ultodo = document.querySelector('ul#todolist');
         if (!ultodo) {
             ultodo = document.createElement('ul');
